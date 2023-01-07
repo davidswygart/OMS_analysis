@@ -3,13 +3,17 @@ G = findgroups(splitBy);
 splitParam = unique(splitBy);
 
 groupAvg = splitapply(@mean, plotWhat, G);
-groupSTD = splitapply(@mean, plotWhat, G);
+groupSTD = splitapply(@std, plotWhat, G);
 groupN = splitapply(@length, plotWhat, G);
+groupSEM = groupSTD  ./ sqrt(groupN);
 
 x = categorical(splitParam);
 y = groupAvg;
 
 
 bar(x,y)
-errorbar(1:length(groupAvg), y, groupSTD, 'black', 'LineStyle', 'none')
+hold on
+err = groupSEM;
+errorbar(1:length(groupAvg), y, err, 'black', 'LineStyle', 'none')
+scatter(G, plotWhat, 'black', 'filled')
 end

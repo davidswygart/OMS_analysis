@@ -4,8 +4,10 @@ table = table((table.width > 79 & table.width <101),:);
 objectMotionTable = table(strcmp(table.motionPath, 'object motion'), :); 
 
 objectMotionTable = objectMotionTable(~isnan(objectMotionTable.OMSI_std), :); % get rid of nans (no spikes in both differential and global)
-objectMotionTable = objectMotionTable(objectMotionTable.OMSI_std < 0.2, :); % get rid of uncertain OMSI values (probably )
+%objectMotionTable = objectMotionTable(objectMotionTable.OMSI_std < 0.2, :); % get rid of uncertain OMSI values
 
 checkForDuplicateCells(objectMotionTable);
 
+figure(2)
+clf
 plotBar(objectMotionTable.OMSI, objectMotionTable.cellType)

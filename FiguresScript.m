@@ -19,18 +19,8 @@ ylabel('Moving object OMSI')
 
 %% describing OMSI by other stimuli
 figure(2)
-clf
-plt = scatter(analyzedCells.object, analyzedCells.differential, 'filled');
-plt.MarkerFaceColor = "flat";
-plt.CData = colors(groupID);
-
-hold on
-plot([-1,1], [-1,1],'--k')% unity line
-plot([-1, 1], [0,0], 'k')% x axis
-plot([0,0], [-1, 1], 'k')% y axis
-xlim([-.4,1])
-ylim([-.4,1])
-
+plt = scatterByCellType(analyzedCells.object, analyzedCells.differential, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('differential motion OMSI')
+
 

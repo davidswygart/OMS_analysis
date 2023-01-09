@@ -23,18 +23,19 @@ scatterByCellType(analyzedCells.differential, analyzedCells.object, colors(group
 ylabel('Moving object OMSI')
 xlabel('Differential motion OMSI')
 
-lmeDifferential = fitlme(analyzedCells, 'object~differential+(1|cellType)+(differential-1|cellType)');
+lmeDifferential = fitlme(analyzedCells, 'object~differential+(differential|cellType)');
 %% describing OMSI by reversing contrast
 figure(2)
 scatterByCellType(analyzedCells.contrastReversing, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('Reversing contrast OMSI')
 
-lmeContrastReversing = fitlme(analyzedCells, 'object~contrastReversing+(1|cellType)+(contrastReversing-1|cellType)');
+lmeContrastReversing = fitlme(analyzedCells, 'object~contrastReversing+(contrastReversing|cellType)');
 %% describing OMSI by SMS
 figure(2)
 scatterByCellType(analyzedCells.sms, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('Suppression (SI)')
 
-lmeSms = fitlme(analyzedCells, 'object~sms+(1|cellType)+(sms-1|cellType)');
+lmeSms = fitlme(analyzedCells, 'object~sms+(sms|cellType)');
+

@@ -1,0 +1,45 @@
+function OMS_dataTable = smsDataGrabber(TreeBrowserGUI, smallSpotSize)
+T = TreeBrowserGUI;
+nodes = getTreeLevel_new(T, 'class', 'SpotsMultiSizeAnalysis');
+
+data = struct();
+
+for i=1:length(nodes)
+    datasetNodes = T.subtree(nodes(i));
+    parentNode = datasetNodes.Node{1};
+    
+    cellData = loadAndSyncCellData(parentNode.cellName);
+
+    data.cellName{i, 1} = parentNode.cellName;
+    data.cellType{i, 1} = cellData.cellType;
+    data.dataset{i,1} = parentNode.name;
+    
+    %% spikes counted
+    spotSizes = parentNode.spotSize;
+    
+    smallSpotSpikes = datasetNodes.Node{smallSpotIndex+1}.spikeCount_stimToEnd.value;
+    largeSpotSpikes = datasetNodes.Node{length(spotSizes)+1}.spikeCount_stimToEnd.value;
+
+    %% small spot response
+    [~, smallSpotIndex] = min(abs(spotSizes - smallSpotSize));
+    data.smallSpotResponse(i, 1) = spikes.mean_c(smallSpotIndex);
+    data.smallSpotStd(i,1) = spikes.SD_c(smallSpotIndex);
+    data.smallSpotN(i,1) = spikes.N(smallSpotIndex);
+
+    %% large spot response
+    data.largeSpotResponse(i, 1) = spikes.mean_c(end);
+    data.largeSpotStd(i,1) = spikes.SD_c(end);
+    data.largeSpotN(i,1) = spikes.N(end);
+    
+    %% Suppression index (SI)
+
+    
+    [si, standDev] =  analyticalCV(centerSpikes, globalSpikes);
+    data.SI(i,1) = si;
+    data.SI_std(i,1) = standDev;
+end
+
+OMS_dataTable = struct2table(data);
+OMS_dataTable(strcmp(OMS_dataTable.motionPath, 'random walk'), 'motionPath') = {'differential motion'};
+OMS_dataTable(strcmp(OMS_dataTable.motionPath, 'filtered noise'), 'motionPath') = {'object motion'};
+end

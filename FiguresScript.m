@@ -12,6 +12,25 @@ xlabel('standard deviation of OMSI calculation')
 ylabel('cell count')
 objectMotionTable = objectMotionTable(objectMotionTable.OMSI_std < 0.3, :); % get rid of uncertain OMSI values
 
-% looking at OMSI for each cell type
+%% Using manually curated data from Excel sheet
+figure(1)
+[groupID, colors] = plotBar(analyzedCells.object, analyzedCells.cellType);
+ylabel('Moving object OMSI')
+
+%% describing OMSI by other stimuli
 figure(2)
-plotBar(objectMotionTable.OMSI, objectMotionTable.cellType)
+clf
+plt = scatter(analyzedCells.object, analyzedCells.differential, 'filled');
+plt.MarkerFaceColor = "flat";
+plt.CData = colors(groupID);
+
+hold on
+plot([-1,1], [-1,1],'--k')% unity line
+plot([-1, 1], [0,0], 'k')% x axis
+plot([0,0], [-1, 1], 'k')% y axis
+xlim([-.4,1])
+ylim([-.4,1])
+
+ylabel('Moving object OMSI')
+xlabel('differential motion OMSI')
+

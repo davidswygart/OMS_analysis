@@ -17,10 +17,24 @@ figure(1)
 [groupID, colors] = plotBar(analyzedCells.object, analyzedCells.cellType);
 ylabel('Moving object OMSI')
 
-%% describing OMSI by other stimuli
+%% describing OMSI by differential motion
 figure(2)
-plt = scatterByCellType(analyzedCells.object, analyzedCells.differential, colors(groupID));
+scatterByCellType(analyzedCells.differential, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
-xlabel('differential motion OMSI')
+xlabel('Differential motion OMSI')
 
+lmeDifferential = fitlme(analyzedCells, 'object~differential+(1|cellType)+(differential-1|cellType)');
+%% describing OMSI by reversing contrast
+figure(2)
+scatterByCellType(analyzedCells.contrastReversing, analyzedCells.object, colors(groupID));
+ylabel('Moving object OMSI')
+xlabel('Reversing contrast OMSI')
 
+lmeContrastReversing = fitlme(analyzedCells, 'object~contrastReversing+(1|cellType)+(contrastReversing-1|cellType)');
+%% describing OMSI by SMS
+figure(2)
+scatterByCellType(analyzedCells.sms, analyzedCells.object, colors(groupID));
+ylabel('Moving object OMSI')
+xlabel('Suppression (SI)')
+
+lmeSms = fitlme(analyzedCells, 'object~sms+(1|cellType)+(sms-1|cellType)');

@@ -10,10 +10,11 @@ groupSEM = groupSTD  ./ sqrt(groupN);
 x = categorical(splitParam);
 y = groupAvg;
 
-
+clf
 bar(x,y)
 hold on
 err = groupSEM;
 errorbar(1:length(groupAvg), y, err, 'black', 'LineStyle', 'none')
 scatter(G, plotWhat, 'black', 'filled')
+hold off
 end

@@ -23,19 +23,47 @@ scatterByCellType(analyzedCells.differential, analyzedCells.object, colors(group
 ylabel('Moving object OMSI')
 xlabel('Differential motion OMSI')
 
-lmeDifferential = fitlme(analyzedCells, 'object~differential+(differential|cellType)');
+
 %% describing OMSI by reversing contrast
 figure(2)
 scatterByCellType(analyzedCells.contrastReversing, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('Reversing contrast OMSI')
 
-lmeContrastReversing = fitlme(analyzedCells, 'object~contrastReversing+(contrastReversing|cellType)');
 %% describing OMSI by SMS
 figure(2)
 scatterByCellType(analyzedCells.sms, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('Suppression (SI)')
 
-lmeSms = fitlme(analyzedCells, 'object~sms+(sms|cellType)');
+
+%% comparing to linear effect mixed model
+rsquared = nan([3,2]);
+
+% differential
+lme = fitlme(analyzedCells, 'object~differential+(differential|cellType)');
+rsquared(1,1) = lme.Rsquared.Adjusted;
+
+correlation = corrcoef(analyzedCells.object,analyzedCells.differential);
+rsquared(1,2) = correlation(2,1) .^ 2;
+
+% reversing contrast
+lme = fitlme(analyzedCells, 'object~contrastReversing+(contrastReversing|cellType)');
+rsquared(2,1) = lme.Rsquared.Adjusted;
+
+correlation = corrcoef(analyzedCells.object,analyzedCells.contrastReversing);
+rsquared(2,2) = correlation(2,1) .^ 2;
+
+% SMS
+lme = fitlme(analyzedCells, 'object~sms+(sms|cellType)');
+rsquared(3,1) = lme.Rsquared.Adjusted;
+
+correlation = corrcoef(analyzedCells.object,analyzedCells.sms);
+rsquared(3,2) = correlation(2,1) .^ 2;
+
+% plot bar graph
+figure(3)
+bar(rsquared)
+
+
 

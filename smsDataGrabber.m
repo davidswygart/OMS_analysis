@@ -1,4 +1,4 @@
-function OMS_dataTable = smsDataGrabber(TreeBrowserGUI, smallSpotSize)
+function OMS_dataTable = smsDataGrabber(TreeBrowserGUI)
 T = TreeBrowserGUI;
 nodes = getTreeLevel_new(T, 'class', 'SpotsMultiSizeAnalysis');
 
@@ -16,7 +16,7 @@ for i=1:length(nodes)
     
     %% spikes counted
     spotSizes = parentNode.spotSize;
-    [~, smallSpotIndex] = min(abs(spotSizes - smallSpotSize));
+    [~, smallSpotIndex] = max(datasetNodes.Node{1}.spikeCount_stimToEnd.mean_c);
     largeSpotIndex = length(spotSizes);
     
     smallSpotSpikes = datasetNodes.Node{smallSpotIndex+1}.spikeCount_stimToEnd.value;

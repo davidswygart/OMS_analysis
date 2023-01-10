@@ -1,5 +1,5 @@
 function OMS_dataTable = omsDataGrabber(TreeBrowserGUI)
-T = TreeBrowserGUI.analysisTree;
+T = TreeBrowserGUI;
 
 nodes = getTreeLevel_new(T, 'class', 'ObjectMotionSensitivityAnalysis');
 

@@ -21,7 +21,9 @@ barGraph.CData = colors;
 hold on
 err = groupSEM;
 errorbar(1:length(groupAvg), y, err, 'black', 'LineStyle', 'none')
-scatter(groupID, plotWhat, 'black', 'filled')
+
+allX = categorical(splitBy);
+scatter(allX, plotWhat, 'black', 'filled')
 hold off
 
 end

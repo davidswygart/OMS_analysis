@@ -22,20 +22,27 @@ figure(2)
 scatterByCellType(analyzedCells.differential, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('Differential motion OMSI')
-
+xlim([-.4,1])
+ylim([-.4,1])
+title('')
 
 %% describing OMSI by reversing contrast
 figure(2)
 scatterByCellType(analyzedCells.contrastReversing, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('Reversing contrast OMSI')
+xlim([-.4,1])
+ylim([-.4,1])
+title('')
 
 %% describing OMSI by SMS
 figure(2)
 scatterByCellType(analyzedCells.sms, analyzedCells.object, colors(groupID));
 ylabel('Moving object OMSI')
 xlabel('Suppression (SI)')
-
+xlim([-.4,1])
+ylim([-.4,1])
+title('')
 
 %% comparing to linear effect mixed model
 rsquared = nan([3,2]);

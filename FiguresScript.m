@@ -13,10 +13,16 @@ ylabel('cell count')
 objectMotionTable = objectMotionTable(objectMotionTable.OMSI_std < 0.3, :); % get rid of uncertain OMSI values
 
 %% Using manually curated data from Excel sheet
-figure(1)
-[groupID, colors] = plotBar(analyzedCells.object, analyzedCells.cellType);
+figure(10)
+[groupID, groupNames, colors] = plotBar(analyzedCells.object, analyzedCells.cellType);
 ylabel('Moving object OMSI')
-
+ylim([-.4, 1.1])
+% 
+% [p, tbl, stats] = anova1(analyzedCells.object, groupID);
+% results = multcompare(stats);
+% pvals = results(:,6);
+% groups = results(:,1:2);
+% significantGroups = unique(groups(pvals < .05, :));
 
 %%
 rsquared = nan([3,2]);
@@ -34,8 +40,8 @@ title('')
 rsquared(1,1) = linReg_diff.Rsquared.Ordinary;
 
 %linear mixed effect model
-lme_obj = fitlme(analyzedCells, 'object~differential+(differential|cellType)');
-rsquared(1,2) = lme_obj.Rsquared.Adjusted;
+lme_diff = fitlme(analyzedCells, 'object~differential+(differential|cellType)');
+rsquared(1,2) = lme_diff.Rsquared.Adjusted;
 
 %% describing OMSI by reversing contrast
 % linear regression
@@ -78,4 +84,36 @@ bar(x, rsquared)
 ylabel('R^2')
 legend('linear regression','linear mixed-effects')
 
+%%
+figure(4);
+clf
 
+lme_sms = fitlme(analyzedCells, 'object~sms+(sms|cellType)');
+lme_sms = fitlme(analyzedCells, 'object~sms+cellType+(1|cellType)+(sms-1|cellType)');
+
+mdl = lme_diff;
+mdl = lme_revCon;
+mdl = lme_sms;
+
+var_names = categorical(mdl.CoefficientNames(1:end));
+bar(var_names, mdl.Coefficients.Estimate(1:end), 'FaceColor',[0.5,0.5,0.5],'EdgeColor','k');
+set(gca, 'TickLabelInterpreter', 'none')
+hold('on');
+errorbar(var_names, mdl.Coefficients.Estimate(1:end), ...
+    mdl.Coefficients.SE(1:end)*1.96, 'k.');
+
+hold('off');
+%% example plots
+figure(2)
+fig = gcf;
+axObjs = fig.Children;
+dataObjs = axObjs.Children;
+lineNumber = 5;
+
+x = dataObjs(lineNumber).XData;
+y = dataObjs(lineNumber).YData;
+
+figure(24)
+plot(x,y, 'k')
+xlim([5,10])
+axis off

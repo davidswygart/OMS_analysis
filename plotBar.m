@@ -1,4 +1,4 @@
-function [groupID, colors] = plotBar(plotWhat, splitBy)
+function [groupID, splitParam, colors] = plotBar(plotWhat, splitBy)
 
 [splitParam,~, groupID ] = unique(splitBy, 'stable'); %leaves group values in same order as recieved
 
@@ -24,6 +24,17 @@ errorbar(1:length(groupAvg), y, err, 'black', 'LineStyle', 'none')
 
 allX = categorical(splitBy);
 scatter(allX, plotWhat, 'black', 'filled')
+
+% ANOVA
+[~, ~, stats] = anova1(plotWhat, groupID, 'off');
+results = multcompare(stats, 'Display','off');
+pvals = results(:,6);
+groups = results(:,1:2);
+significantGroups = unique(groups(pvals < .05, :));
+groupNames = categorical(splitParam(significantGroups));
+scatter(groupNames, ones(length(significantGroups),1)*-.3, '*r');
+
+
 hold off
 
 end

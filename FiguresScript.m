@@ -42,7 +42,7 @@ rsquared(1,1) = linReg_diff.Rsquared.Ordinary;
 %linear mixed effect model
 lme_diff = fitlme(analyzedCells, 'object~differential+(differential|cellType)');
 rsquared(1,2) = lme_diff.Rsquared.Adjusted;
-
+saveas(gcf, 'differentialScatter.png')
 %% describing OMSI by reversing contrast
 % linear regression
 figure(2)
@@ -57,7 +57,7 @@ rsquared(2,1) = linReg_revCon.Rsquared.Ordinary;
 %linear mixed effect model
 lme_revCon = fitlme(analyzedCells, 'object~contrastReversing+(contrastReversing|cellType)');
 rsquared(2,2) = lme_revCon.Rsquared.Adjusted;
-
+saveas(gcf, 'reversingContrastScatter.png')
 %% describing OMSI by SMS
 % linear regression
 figure(2)
@@ -72,7 +72,7 @@ rsquared(3,1) = linReg_sms.Rsquared.Ordinary;
 %linear mixed effect model
 lme_sms = fitlme(analyzedCells, 'object~sms+(sms|cellType)');
 rsquared(3,2) = lme_sms.Rsquared.Adjusted;
-
+saveas(gcf, 'smsScatter.png')
 %% comparing linear regression to mixed effects model
 % plot bar graph
 figure(3)
@@ -83,6 +83,8 @@ x = reordercats(x,types);
 bar(x, rsquared)
 ylabel('R^2')
 legend('linear regression','linear mixed-effects')
+ylim([0,1])
+saveas(gcf, 'mixedEffectsRsquared.png')
 
 %%
 figure(4);
